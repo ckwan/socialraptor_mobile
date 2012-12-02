@@ -1,10 +1,14 @@
 package com.socialraptor.winna;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
 
-public class Login implements OnClickListener {
+public class Login extends Controller implements OnClickListener {
 	
 	EditText usrText;
 	EditText pswText;
@@ -13,7 +17,7 @@ public class Login implements OnClickListener {
 	TextView error;
 	Socialraptor ctrl;
 
-	public Login(Socialraptor ctr) {
+	public Login(Socialraptor ctr, Bundle savedState) {
 		ctrl = ctr;
 		usrText = (EditText) ctrl.findViewById(R.id.username);
 		pswText = (EditText) ctrl.findViewById(R.id.password);
@@ -33,23 +37,29 @@ public class Login implements OnClickListener {
 			lBtn.setVisibility(android.view.View.INVISIBLE);
 			prg.setVisibility(android.view.View.VISIBLE);
 			
-			// form a JSONobj and send a login request, read response and..
-			String response = "success"; //pseudo, change to whatever
+			Communicator c = new Communicator(this,usrText.getText().toString(),pswText.getText().toString(),"auth","");
 			
-			if (response.equals("success")) {
+			c.execute();
+			// form a JSONobj and send a login request, read response and..
+		}
+	}
+	
+	public void doJSONResponse(JSONObject j)
+	{
+		System.out.println("login response success");
+		try {
+			if (j.getBoolean("success")) {
 				// go to posts list screen
 				ctrl.setContentView(R.layout.postlist);
-				TextView txt = (TextView) ctrl.findViewById(R.id.msg);
-				txt.setText("username: '" + usrText.getText() + "' \n password: '" + pswText.getText() + "'");
 			}
-			else if (response.equals("invalid")) {
+			else if (!j.getBoolean("success")) {
 				// invalid username or password according to web services
 			}
-			else if (response.equals("serviceinterrupt")) {
+			else if (j.isNull("success")) {
 				// web services is down
 			}
-			
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
-		
 	}
 }

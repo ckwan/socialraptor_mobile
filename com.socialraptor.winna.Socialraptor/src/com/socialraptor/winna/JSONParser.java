@@ -1,5 +1,7 @@
 package com.socialraptor.winna;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.io.*;
 import org.apache.http.*;
@@ -59,5 +61,24 @@ public class JSONParser {
 		//return the JSON strings
 		return jObjString;
 	}	
+	
+	//Return MD5 hased password as Hex String
+	public String mdV(String password) throws NoSuchAlgorithmException{
+		
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		md.update(password.getBytes());
+		
+		byte byteData[] = md.digest();
+		StringBuffer sb = new StringBuffer();
+		
+		for(int i=0; i<byteData.length; i++){
+			String hex = Integer.toHexString(0xff & byteData[i]);
+			if(hex.length() == 1) 
+				sb.append('0');
+			sb.append(hex);
+		}
+		
+		return sb.toString();
+	}
 }
 	
