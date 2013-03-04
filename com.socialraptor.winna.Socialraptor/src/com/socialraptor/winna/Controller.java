@@ -1,8 +1,9 @@
 package com.socialraptor.winna;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
 
-public abstract class Controller {
+public interface Controller {
 	
-	public abstract void doJSONResponse (JSONObject jso);
+	public abstract void doJSONResponse (JSONArray jsa);
+	
 }

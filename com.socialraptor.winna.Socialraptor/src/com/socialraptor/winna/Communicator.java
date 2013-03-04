@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 import org.apache.http.HttpEntity;
@@ -15,12 +13,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.*;
 
 import android.os.AsyncTask;
 
-public class Communicator extends AsyncTask<Object, Object, JSONObject> {
+public class Communicator extends AsyncTask<Object, Object, JSONArray> {
 	
 	String authstr, type, query;
 	Controller c;
@@ -30,7 +27,7 @@ public class Communicator extends AsyncTask<Object, Object, JSONObject> {
 		c = con;
 		this.type = type;
 		this.query = query;
-		String auth = md5(psw);
+		String auth = psw;
 		
 		authstr = "uID="+usn+"&auth="+auth;
 	}
@@ -69,45 +66,30 @@ public class Communicator extends AsyncTask<Object, Object, JSONObject> {
 	    Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
 	    return s.hasNext() ? s.next() : "";
 	}
-	
-	public static String md5(String password) {
-		
-		MessageDigest md=null;
-		try {
-			md = MessageDigest.getInstance("MD5");
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		md.update(password.getBytes());
-		
-		byte byteData[] = md.digest();
-		StringBuffer sb = new StringBuffer();
-		
-		for(int i=0; i<byteData.length; i++){
-			String hex = Integer.toHexString(0xff & byteData[i]);
-			if(hex.length() == 1) 
-				sb.append('0');
-			sb.append(hex);
-		}
-		
-		return sb.toString();
-	}
 
 	@Override
-	protected JSONObject doInBackground(Object... params) {
-		JSONObject jso = null;
+	protected JSONArray doInBackground(Object... params) {
+		JSONArray jsa = null;
 		String response = getHTML("http://webservices.socialraptor.com/"+type+"/?"+authstr+query);
+
+		
 		try {
-			jso = new JSONObject(response);
-		} catch (JSONException e1) {
+			jsa = new JSONArray(response);
+		} catch (JSONException e) {
+			try {
+				JSONObject jso = new JSONObject(response);
+				jsa = new JSONArray();
+				jsa.put(jso);
+			}
+			catch (JSONException e1) {
 			e1.printStackTrace();
+			}
 		}
-		return jso;
+		return jsa;
 	}
 	
-	protected void onPostExecute(JSONObject jso)
+	protected void onPostExecute(JSONArray jsa)
 	{
-		System.out.println("onpostexecute found.");
-        c.doJSONResponse(jso);
+        c.doJSONResponse(jsa);
     }
 }

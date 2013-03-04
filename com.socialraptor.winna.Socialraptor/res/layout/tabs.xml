@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
 
     <TabHost
         android:id="@+id/tabhost"
@@ -65,15 +64,62 @@
 
                 <LinearLayout
                     android:id="@+id/tab3"
+                    android:orientation="vertical"
+                    android:background="@drawable/msg_back"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" >
-                    <TextView android:text = "In Progress ..." android:id = "@+id/testV3"
-                              android:textStyle="bold" android:textSize="20dp"
-                              android:layout_width="wrap_content" android:layout_height="wrap_content"
+                     <TextView android:text = "Mobile Team 4 " android:id = "@+id/testV2"
+                              android:textStyle="bold" android:textSize="15dp"
+                              android:layout_width="fill_parent" android:layout_height="wrap_content"
+                              />
+                     <TextView android:text = "Team Members : Brent, Calvin, Luke " android:id = "@+id/testV3"
+                              android:textStyle="bold" android:textSize="15dp"
+                              android:layout_width="fill_parent" android:layout_height="wrap_content"
+                              />
+                     <TextView android:text = "Build Version : 0.2 alpha" android:id = "@+id/testV4"
+                              android:textStyle="bold" android:textSize="15dp"
+                              android:layout_width="fill_parent" android:layout_height="wrap_content"
+                              />
+                     <TextView android:text = "If you like the app -> Please donate  : " android:id = "@+id/testV5"
+                              android:textStyle="bold" android:textSize="15dp"
+                              android:layout_width="fill_parent" android:layout_height="wrap_content"
+                              />
+                     <TextView android:text = "Contact Us : " android:id = "@+id/testV6"
+                              android:textStyle="bold" android:textSize="15dp"
+                              android:layout_width="fill_parent" android:layout_height="wrap_content"
                               />
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
     </TabHost>
-
-</LinearLayout>
+    
+    <SlidingDrawer 
+        android:id="@+id/slider"
+        android:handle="@+id/handle"
+        android:content="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent" >
+        
+        <ImageView 
+            android:id="@+id/handle"
+            android:src="@drawable/fbutton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"  />
+        
+        <LinearLayout 
+            android:id="@+id/content"
+            android:background="@drawable/fback"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"  >
+            
+             <ListView
+             	android:id="@+id/flist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+             </ListView>
+             
+        </LinearLayout>
+        
+    </SlidingDrawer>
+    
+</FrameLayout>
